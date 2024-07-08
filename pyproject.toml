@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "llm_mastodon_agent"
+version = "0.1.0"
+description = ""
+authors = ["Simon Münker <muenker@uni-trier.de>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+requests = "^2.32.3"
+pydantic = "^2.8.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
