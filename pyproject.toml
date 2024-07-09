@@ -5,12 +5,29 @@ description = ""
 authors = ["Simon Münker <muenker@uni-trier.de>"]
 readme = "README.md"
 
+
 [tool.poetry.dependencies]
 python = "^3.12"
 requests = "^2.32.3"
 pydantic = "^2.8.2"
+beautifulsoup4 = "^4.12.3"
+lxml = "^5.2.2"
+
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.5.1"
+mypy = "^1.10.1"
 
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+
+[tool.ruff]
+line-length = 96
+
+
+[tool.mypy]
+files = "llm_mastodon_agent"
+disable_error_code = "import-untyped"

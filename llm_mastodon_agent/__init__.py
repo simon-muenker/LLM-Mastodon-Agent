@@ -1,4 +1,4 @@
-from .mastodon import MastodonUser
-from .agent import AgentInterface
+from . import schemas
+from .client import Client
 
-__all__ = ["MastodonUser", "AgentInterface"]
+__all__ = ["schemas", "Client"]
