@@ -38,3 +38,7 @@ agent = llm_mastodon_agent.Agent(
 # generates a post using the defined integration and posts it through mastodon client
 agent.post(topic="Baseball")
 ```
+
+### Scheduler
+
+todo, for now a proposal
