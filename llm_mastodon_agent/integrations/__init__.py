@@ -1,3 +1,7 @@
-from .twon import TWON
+from ._interface import Interface
 
-__all__ = ["TWON"]
+from .huggingface import Huggingface
+from .ollama import Ollama
+from .web_api import WebAPI
+
+__all__ = ["Interface", "Huggingface", "Ollama", "WebAPI"]

@@ -4,7 +4,7 @@ import tomllib
 
 import llm_mastodon_agent
 
-CONF = tomllib.load(open(f"{os.path.dirname(os.path.realpath(__file__))}/conf.toml", "rb"))
+CONF = tomllib.load(open(f"{os.path.dirname(os.path.realpath(__file__))}/_conf.toml", "rb"))
 USER = CONF["users"][0]
 
 client = llm_mastodon_agent.Client(name=USER["name"], bearer=USER["bearer"])

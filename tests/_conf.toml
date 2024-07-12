@@ -1,17 +1,3 @@
-PERSONAS = [
-    "neutral", 
-    "liberal", 
-    "conservative"
-]
-
-TOPICS = [
-    "Ukraine",
-    "United Kingdom",
-    "France",
-]
-
-TIMEOUT = 20
-
 users = [
     {name = "octo_yellow", bearer = "ZgwARX7-VV4rhH1k0-Li6fS0tjmjIv82UwIIqBYJPf0"},
     {name = "octo_green", bearer = "sPuOG6G1XAPqVxJdeH01UEVG19M1PQJ9zBNWo8bjwf8"},
