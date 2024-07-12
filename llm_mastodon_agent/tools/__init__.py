@@ -1,1 +1,3 @@
-# TODO implement news retrieval
+from .news import NewsArticle
+
+__all__ = ["NewsArticle"]

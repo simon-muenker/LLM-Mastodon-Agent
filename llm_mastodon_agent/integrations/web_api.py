@@ -6,7 +6,7 @@ from ._interface import Interface
 class WebAPI(Interface):
     api: str
 
-    def inference(self, system: str, prompt: str) -> str:
+    def inference(self, system: str, prompt: str, **_) -> str:
         return requests.post(
             self.api,
             json={

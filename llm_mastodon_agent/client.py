@@ -16,7 +16,7 @@ class Client(pydantic.BaseModel):
     def request_header(self) -> typing.Dict:
         return {"Authorization": f"Bearer {self.bearer}"}
 
-    def __post(self, endpoint: str, data: typing.Dict) -> typing.Dict:
+    def __post(self, endpoint: str, data: typing.Dict = {}) -> typing.Dict:
         return requests.post(
             f"{self.API}/{endpoint}", headers=self.request_header, data=data
         ).json()
