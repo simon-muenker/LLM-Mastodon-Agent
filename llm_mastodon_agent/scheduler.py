@@ -18,7 +18,7 @@ class Scheduler(pydantic.BaseModel):
     post_frequency: int = 2
     post_probability: float = 0.4
 
-    def __call__(self):
+    def __call__(self) -> None:
         current_time: int = 0
 
         while True:

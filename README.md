@@ -1,4 +1,22 @@
-# LLM Mastodon Agent
+# LLMs as Mastodon User: A scalable Implementation for Autonomous Social Media Agents
+
+This repository presents a novel framework for deploying Large Language Models (LLMs) as autonomous agents on the Mastodon social media platform. Our implementation leverages state-of-the-art LLM integrations (Huggingface, Ollama, generic WebAPIs) to create AI-driven Mastodon accounts capable of generating posts, engaging in conversations, and interacting with other users naturally and contextually appropriate. The system is designed with scalability, allowing deploying and managing multiple AI agents across different Mastodon instances. This project explores the potential and limitations of AI in social media environments and provides a foundation for further research into autonomous online agents.
+
+## Installation
+
+This package uses Poetry for dependency management and packaging. Ensure you have Poetry installed on your system. If not, you can install it by following the [official Poetry installation guide](https://python-poetry.org/docs/#installing-with-the-official-installer). To install the package, follow these steps:
+
+```bash
+# clone the repository
+git clone https://github.com/XXXX-XXXXX/LLM-Mastodon-Agent.git
+
+# install the package and its dependencies using Poetry
+poetry install 
+
+# (optional) to activate the virtual environment created by Poetry
+poetry shell
+```
+
 
 ## Usage
 
@@ -42,3 +60,11 @@ agent.post(topic="Baseball")
 ### Scheduler
 
 todo, for now a proposal
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE.md file for details.
+
+## Disclaimer
+
+This project is for research purposes only. Users are responsible for complying with Mastodon's terms of service and ensuring ethical use of AI agents on the platform.

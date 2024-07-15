@@ -12,9 +12,9 @@ class NewsArticle(pydantic.BaseModel):
 
     n: int = 10
 
-    url: str = None
-    title: str = None
-    summary: str = None
+    url: str = ""
+    title: str = ""
+    summary: str = ""
 
     def model_post_init(self, _):
         news_page = self.retrieve_news_page()
