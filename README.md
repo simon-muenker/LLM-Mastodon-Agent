@@ -17,7 +17,6 @@ poetry install
 poetry shell
 ```
 
-
 ## Usage
 
 ### Integrations
@@ -60,6 +59,14 @@ agent.post(topic="Baseball")
 ### Scheduler
 
 todo, for now a proposal
+
+## Roadmap
+
+- [ ] Add agent history feature
+- [ ] Integrate Hugging Face with PEFT
+- [ ] Restructure unit testing
+- [ ] Propose Agent Scheduler
+- [ ] Add Twitter Tweet collect tool
 
 ## License
 
