@@ -15,3 +15,9 @@ history = llm_mastodon_agent.schemas.Timeline.from_request(client.get_history())
 print(timeline.remove_replies().to_prompt_segment(n=3))
 
 print(timeline.remove_replies().select_random())
+
+thread = llm_mastodon_agent.schemas.Timeline.from_request(
+    client.get_post_w_replies("112734105231328503")
+)
+
+print(thread[0].to_prompt_segment() + thread.to_prompt_segment(n=3))

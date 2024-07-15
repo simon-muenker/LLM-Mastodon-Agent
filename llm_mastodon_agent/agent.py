@@ -2,6 +2,7 @@ import pydantic
 
 from . import integrations
 from . import tools
+from . import schemas
 
 from .client import Client
 from .prompting import Prompting
@@ -13,20 +14,36 @@ class Agent(pydantic.BaseModel):
     client: Client
     integration: integrations.Interface
 
-    def post(self, persona: str, topic: str, retrieve_news: bool = True) -> None:
+    @pydantic.computed_field  # type: ignore
+    @property
+    def history(self) -> schemas.Timeline:
+        return schemas.Timeline.from_request(self.client.get_history())
+
+    def get_persona(self, ideology: str, with_history: bool = True) -> str:
+        return self.prompts.get_persona_description(self.client.name, ideology) + (
+            "\n" + self.prompts.get_persona_history(self.history.to_prompt_segment())
+            if with_history
+            else ""
+        )
+
+    def do_inference(self, ideology: str, prompt: str) -> str:
+        return self.integration.inference(
+            system=self.get_persona(ideology),
+            prompt=prompt,
+        )
+
+    def post(self, ideology: str, topic: str, retrieve_news: bool = True) -> None:
         if retrieve_news:
             article = tools.NewsArticle(topic=topic)
             topic = article.summary
 
-        response: str = self.integration.inference(
-            system=self.prompts.get_persona_description(persona),
-            prompt=self.prompts.get_post_task(topic),
-        )
+        response: str = self.do_inference(ideology, self.prompts.get_post_task(topic))
 
         self.client.post(f"{response}{" " + article.url if retrieve_news else ""}")
 
-    def reply(self):
-        raise NotImplementedError
+    def reply(self, ideology: str, thread: schemas.Timeline, context_length: int = 2) -> None:
+        response: str = self.do_inference(
+            ideology, self.prompts.get_reply_task(thread.to_prompt_segment(n=context_length))
+        )
 
-    def like(self):
-        raise NotImplementedError
+        self.client.reply(thread[-1].idx, response)

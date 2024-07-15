@@ -1,3 +1,5 @@
+import datetime
+
 import pydantic
 
 
@@ -5,10 +7,11 @@ class Post(pydantic.BaseModel):
     idx: str
     author: str
     message: str
+    timestamp: datetime.datetime
 
     reply_idx: str | None = None
 
-    @pydantic.computed_field
+    @pydantic.computed_field  # type: ignore
     @property
     def is_reply(self) -> bool:
         return bool(self.reply_idx)

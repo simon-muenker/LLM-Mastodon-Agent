@@ -11,7 +11,7 @@ class Client(pydantic.BaseModel):
 
     API: str = "https://twon.uni-trier.de/api/v1"
 
-    @pydantic.computed_field
+    @pydantic.computed_field  # type: ignore
     @property
     def request_header(self) -> typing.Dict:
         return {"Authorization": f"Bearer {self.bearer}"}
@@ -36,8 +36,14 @@ class Client(pydantic.BaseModel):
     def get_user_meta(self):
         return self.__get(f"accounts/lookup?acct={self.name}")
 
+    def get_post_w_replies(self, idx: str):
+        return [
+            self.__get(f"statuses/{idx}"),
+            *self.__get(f"statuses/{idx}/context")["descendants"],
+        ]
+
     def get_history(self):
         return self.__get(f"accounts/{self.get_user_meta()["id"]}/statuses")
 
     def get_timeline(self, kind: typing.Literal["public", "home"] = "public") -> typing.Dict:
-        return self.__get(f"timelines/{kind}")
+        return self.__get(f"timelines/{kind}?local=true&limit=40")

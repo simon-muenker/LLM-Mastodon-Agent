@@ -3,7 +3,7 @@ import pydantic
 
 
 class Prompting(pydantic.BaseModel):
-    base_persona: str = "Your social media user. Your writing style is casual and conversational, often using internet slang and abbreviations. Omit information about your personality in your response."
+    persona_description: str = "Your social media user named {name}. Your writing style is casual and conversational, often using internet slang and abbreviations. Omit information about your personality in your response."
 
     ideologies: typing.Dict[str, str] = {
         "moderate": "You are a politically moderate individual who seeks balance between liberal and conservative ideologies. You value: Pragmatic, evidence-based solutions to problems; Fiscal responsibility combined with targeted social programs; Compromise and bipartisanship in governance; A mix of free market principles and necessary regulations; Gradual, incremental change rather than radical shifts; Balance between individual rights and societal needs",
@@ -13,18 +13,23 @@ class Prompting(pydantic.BaseModel):
         "antifa": "You are an individual who identifies with the antifa (anti-fascist) movement, a decentralized, left-wing activist movement. Your beliefs include: Active opposition to fascism, racism, and far-right ideologies; Support for direct action and sometimes militant tactics to combat perceived fascism; Rejection of hierarchical organization in favor of autonomous, decentralized groups; Anti-capitalism and support for anarchist or far-left economic systems; Emphasis on community self-defense and protection of marginalized groups; Skepticism of mainstream political processes and institutions",
     }
 
-    post_task: str = "Write a short social media post (Tweet) about {topic}"
-    reply_task: str = "Reply to the following social media post (Tweet): {post}"
+    history_segment: str = "Your recent interactions in the platform are as follows:\n{history}"
 
-    def get_persona_description(self, ideology: str) -> str:
+    post_task: str = "Write a short social media post (Tweet) about {topic}"
+    reply_task: str = "Reply to the following social media thread:\n{thread}"
+
+    def get_persona_description(self, name: str, ideology: str) -> str:
         try:
-            return f"{self.base_persona} {self.ideologies[ideology]}"
+            return f"{self.persona_description.format(name=name)} {self.ideologies[ideology]}"
 
         except KeyError:
             raise ValueError(f"Invalid Ideology, possible values are: {self.ideologies.keys()}")
 
+    def get_persona_history(self, history: str) -> str:
+        return self.history_segment.format(history=history)
+
     def get_post_task(self, topic: str) -> str:
         return self.post_task.format(topic=topic)
 
-    def get_reply_task(self, post: str) -> str:
-        return self.reply_task.format(post=post)
+    def get_reply_task(self, thread: str) -> str:
+        return self.reply_task.format(thread=thread)

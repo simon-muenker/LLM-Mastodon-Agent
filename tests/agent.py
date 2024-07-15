@@ -15,5 +15,11 @@ agent = llm_mastodon_agent.Agent(
     # integration=llm_mastodon_agent.integrations.Ollama(llm_slug="phi3:instruct"),
 )
 
-for ideology in agent.prompts.ideologies.keys():
-    agent.post(persona=ideology, topic="I am proud of my country's history.", retrieve_news=False)
+
+def test_post_across_idelogies(topic="Voting Age"):
+    for ideology in agent.prompts.ideologies.keys():
+        agent.post(ideology=ideology, topic=topic, retrieve_news=True)
+
+
+print(agent.get_persona("liberal"))
+test_post_across_idelogies()
