@@ -5,6 +5,7 @@ import pydantic
 import requests
 
 from .timeline import Timeline
+from .thread import Thread
 
 
 class Client(pydantic.BaseModel):
@@ -45,8 +46,8 @@ class Client(pydantic.BaseModel):
     def get_user_meta(self) -> typing.Dict:
         return self.__get(f"accounts/lookup?acct={self.name}")[0]
 
-    def get_post_w_replies(self, idx: str) -> Timeline:
-        return Timeline.from_request(
+    def get_post_w_replies(self, idx: str) -> Thread:
+        return Thread.from_request(
             [
                 self.__get(f"statuses/{idx}")[0],
                 *self.__get(f"statuses/{idx}/context")[0]["descendants"],
@@ -55,7 +56,7 @@ class Client(pydantic.BaseModel):
 
     def get_history(self) -> Timeline:
         return Timeline.from_request(
-            self.__get(f"accounts/{self.get_user_meta()[0]["id"]}/statuses")
+            self.__get(f"accounts/{self.get_user_meta()["id"]}/statuses")
         )
 
     def get_timeline(self, kind: typing.Literal["public", "home"] = "public") -> Timeline:

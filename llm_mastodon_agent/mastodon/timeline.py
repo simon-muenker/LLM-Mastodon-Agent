@@ -28,7 +28,7 @@ class Timeline(pydantic.BaseModel):
     def sort_by_timestamp(self) -> "Timeline":
         return Timeline(posts=sorted(self.posts, key=lambda x: x.timestamp))
 
-    def to_prompt_segment(self, n: int = 2) -> str:
+    def to_prompt_segment(self, n: int = 4) -> str:
         return "\n".join([post.to_prompt_segment() for post in self.posts[:n]])
 
     def __len__(self) -> int:

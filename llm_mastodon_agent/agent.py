@@ -40,7 +40,7 @@ class Agent(pydantic.BaseModel):
 
         self.client.post(f"{response}{" " + article.url if retrieve_news else ""}")
 
-    def reply(self, ideology: str, thread: mastodon.Timeline, context_length: int = 2) -> None:
+    def reply(self, ideology: str, thread: mastodon.Thread, context_length: int = 2) -> None:
         response: str = self.do_inference(
             ideology, self.prompts.get_reply_task(thread.to_prompt_segment(n=context_length))
         )
