@@ -9,3 +9,8 @@ check:
 	@poetry check --lock
 	@poetry run ruff format
 	@poetry run mypy
+
+
+.PHONY: test
+test:
+	poetry run pytest

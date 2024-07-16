@@ -1,6 +1,0 @@
-users = [
-    {name = "octo_yellow", bearer = "ZgwARX7-VV4rhH1k0-Li6fS0tjmjIv82UwIIqBYJPf0"},
-    {name = "octo_green", bearer = "sPuOG6G1XAPqVxJdeH01UEVG19M1PQJ9zBNWo8bjwf8"},
-    {name = "octo_red", bearer = "CYk4VEZsqvRwLzWwKvem9ssqdZRALh9OnjrSSaoWH-4"},
-    {name = "octo_pink", bearer = "2U8HTyO0pHTflpC-QC7NTiczShp944_KraQZACaHELU"}
-]

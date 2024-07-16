@@ -24,6 +24,7 @@ newspaper3k = "^0.2.8"
 [tool.poetry.group.dev.dependencies]
 ruff = "^0.5.1"
 mypy = "^1.10.1"
+pytest = "^8.2.2"
 
 
 [build-system]
@@ -38,3 +39,9 @@ line-length = 96
 [tool.mypy]
 files = "llm_mastodon_agent"
 disable_error_code = "import-untyped"
+
+
+[tool.pytest.ini_options]
+log_cli = true
+log_cli_level = "DEBUG"
+testpaths = ["tests"]
