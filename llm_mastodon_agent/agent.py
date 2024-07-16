@@ -2,22 +2,21 @@ import pydantic
 
 from . import integrations
 from . import tools
-from . import schemas
+from . import mastodon
 
-from .client import Client
 from .prompting import Prompting
 
 
 class Agent(pydantic.BaseModel):
     prompts: Prompting = Prompting()
 
-    client: Client
+    client: mastodon.Client
     integration: integrations.Interface
 
     @pydantic.computed_field  # type: ignore
     @property
-    def history(self) -> schemas.Timeline:
-        return schemas.Timeline.from_request(self.client.get_history())
+    def history(self) -> mastodon.Timeline:
+        return self.client.get_history()
 
     def get_persona(self, ideology: str, with_history: bool = True) -> str:
         return self.prompts.get_persona_description(self.client.name, ideology) + (
@@ -41,7 +40,7 @@ class Agent(pydantic.BaseModel):
 
         self.client.post(f"{response}{" " + article.url if retrieve_news else ""}")
 
-    def reply(self, ideology: str, thread: schemas.Timeline, context_length: int = 2) -> None:
+    def reply(self, ideology: str, thread: mastodon.Timeline, context_length: int = 2) -> None:
         response: str = self.do_inference(
             ideology, self.prompts.get_reply_task(thread.to_prompt_segment(n=context_length))
         )

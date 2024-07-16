@@ -1,9 +1,7 @@
 import typing
 import random
-import datetime
 
 import pydantic
-import bs4
 
 from .post import Post
 
@@ -19,18 +17,7 @@ class Timeline(pydantic.BaseModel):
 
     @classmethod
     def from_request(cls, posts: typing.List[typing.Dict]) -> "Timeline":
-        return cls(
-            posts=[
-                Post(
-                    idx=post["id"],
-                    author=post["account"]["username"],
-                    message=bs4.BeautifulSoup(post["content"], "lxml").text,
-                    timestamp=datetime.datetime.fromisoformat(post["created_at"]),
-                    reply_idx=post["in_reply_to_id"],
-                )
-                for post in posts
-            ]
-        )
+        return cls(posts=[Post.from_request(post) for post in posts])
 
     def select_random(self) -> Post:
         return random.choice(self.posts)
@@ -42,7 +29,7 @@ class Timeline(pydantic.BaseModel):
         return Timeline(posts=sorted(self.posts, key=lambda x: x.timestamp))
 
     def to_prompt_segment(self, n: int = 2) -> str:
-        return "\n".join([post.to_prompt_segment() for post in self.posts[-n:]])
+        return "\n".join([post.to_prompt_segment() for post in self.posts[:n]])
 
     def __len__(self) -> int:
         return len(self.posts)

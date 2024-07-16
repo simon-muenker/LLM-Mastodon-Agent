@@ -2,17 +2,17 @@ import os
 import tomllib
 
 
-import llm_mastodon_agent
+import llm_mastodon_agent as src
 
 CONF = tomllib.load(open(f"{os.path.dirname(os.path.realpath(__file__))}/_conf.toml", "rb"))
 USER = CONF["users"][0]
 
-agent = llm_mastodon_agent.Agent(
-    client=llm_mastodon_agent.Client(name=USER["name"], bearer=USER["bearer"]),
-    integration=llm_mastodon_agent.integrations.WebAPI(
+agent = src.Agent(
+    client=src.mastodon.Client(name=USER["name"], bearer=USER["bearer"]),
+    integration=src.integrations.WebAPI(
         llm_slug="mixtral:8x7b-instruct-v0.1-q6_K", api="https://inf.cl.uni-trier.de/"
     ),
-    # integration=llm_mastodon_agent.integrations.Ollama(llm_slug="phi3:instruct"),
+    # integration=src.integrations.Ollama(llm_slug="phi3:instruct"),
 )
 
 
