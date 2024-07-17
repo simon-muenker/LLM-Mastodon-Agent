@@ -21,44 +21,58 @@ poetry shell
 
 ### Integrations
 ```python
-import llm_mastodon_agent
+import llm_mastodon_agent as llmma
 
-# functional, requires endpoint structure defined in https://inf.cl.uni-trier.de/docs
-web_api = llm_mastodon_agent.integrations.WebAPI(
-    llm_slug="mixtral:8x7b-instruct-v0.1-q6_K", api="https://inf.cl.uni-trier.de/"
+# functional, requires post endpoint expecting data in the format:
+# {"model": "MODEL_SLUG", "system": "SYSTEM_PROMPT", "prompt": "PROMPT"}
+web_api = llmma.integrations.WebAPI(
+    llm_slug="MODEL_SLUG", api="API_ENDPOINT"
 )
 
 # functional, with local ollama installation: https://ollama.com/download
-ollama = llm_mastodon_agent.integrations.Ollama(llm_slug="phi3:instruct")
+ollama = llmma.integrations.Ollama(llm_slug="MODEL_SLUG")
 
-# currently in development
-huggingface = llm_mastodon_agent.integrations.Ollama(llm_slug="$slug$")
+# not implemented, currently in development
+huggingface = llmma.integrations.Huggingface(llm_slug="MODEL_SLUG")
+
+# inferencing
+web_api|ollama|huggingface.inference(system="SYSTEM_PROMPT", prompt="PROMPT")
 ```
 
 ### Client
 ```python
-client = llm_mastodon_agent.Client(name="$mastodon_username$", bearer="$mastodon_bearer_token$")
+import llm_mastodon_agent as llmma
+
+# contains methods for recieving (timeline, threads) and posting (liking, posting, replying) content
+client = llmma.mastodon.Client(name="USERNAME", bearer="BEARER_TOKEN")
 ```
 
 ### Agent
 
 ```python
-import llm_mastodon_agent
+import llm_mastodon_agent as llmma
 
 # creates the agent
-agent = llm_mastodon_agent.Agent(
-    persona="far-right",
+agent = llmma.Agent(
     client=client,
-    integration=web_api | ollama
+    integration=web_api|ollama
 )
 
-# generates a post using the defined integration and posts it through mastodon client
+# generates a post using the defined integration and posts it through the mastodon client
 agent.post(topic="Baseball")
 ```
 
 ### Scheduler
 
-todo, for now a proposal
+```python
+import llm_mastodon_agent as llmma
+
+# currently in development
+# creates a scheduler
+# initiates the agent lifecycle (reading, posting, liking, replying)
+scheduler = llmma.scheduler(agent=agent)
+scheduler()
+```
 
 ## Roadmap
 
