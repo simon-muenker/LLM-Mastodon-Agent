@@ -22,9 +22,18 @@ class Scheduler(pydantic.BaseModel):
     cycle_duration: int = 60 * 60  # 1 hour
 
     actions: typing.List[Action] = [
-        Action(name="like", frequency=16, probability=0.4, callback=lambda: logging.debug("liked")),
-        Action(name="post", frequency=2, probability=0.8, callback=lambda: logging.debug("posted")),
-        Action(name="reply", frequency=4, probability=0.4, callback=lambda: logging.debug("replied")),
+        Action(
+            name="like", frequency=16, probability=0.4, callback=lambda: logging.debug("liked")
+        ),
+        Action(
+            name="post", frequency=2, probability=0.8, callback=lambda: logging.debug("posted")
+        ),
+        Action(
+            name="reply",
+            frequency=4,
+            probability=0.4,
+            callback=lambda: logging.debug("replied"),
+        ),
     ]
 
     _current_time: int = 0
@@ -36,8 +45,6 @@ class Scheduler(pydantic.BaseModel):
                     if random.uniform(0.0, 1.0) < action.probability:
                         action.callback()
 
-
             self._current_time += self.planck_time
             self._current_time %= self.cycle_duration
             time.sleep(self.planck_time)
-
