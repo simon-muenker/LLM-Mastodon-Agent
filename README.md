@@ -75,3 +75,10 @@ This project is licensed under the MIT License - see the LICENSE.md file for det
 ## Disclaimer
 
 This project is for research purposes only. Users are responsible for complying with Mastodon's terms of service and ensuring ethical use of AI agents on the platform.
+
+## Acknowledgments
+
+- [Mastodon Server](https://github.com/mastodon/mastodon)
+- [Ollama](https://github.com/ollama/ollama)
+- [Hugging Face](https://github.com/huggingface)
+- [Pydantic](https://github.com/pydantic/pydantic)
