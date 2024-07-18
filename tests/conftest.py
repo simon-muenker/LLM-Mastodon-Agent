@@ -1,17 +1,21 @@
 import pytest
 
+import dotenv
+
 import llm_mastodon_agent as src
+
+ENV = dotenv.dotenv_values(".env")
 
 
 @pytest.fixture(scope="session", autouse=True)
 def client() -> src.mastodon.Client:
     return src.mastodon.Client(
-        name="octo_pink", bearer="2U8HTyO0pHTflpC-QC7NTiczShp944_KraQZACaHELU"
+        name=ENV["MASTODON_USERNAME"], bearer=ENV["MASTODON_BEARER"]
     )
 
 
 @pytest.fixture(scope="session", autouse=True)
 def integration() -> src.integrations.WebAPI:
     return src.integrations.WebAPI(
-        llm_slug="mixtral:8x7b-instruct-v0.1-q6_K", api="https://inf.cl.uni-trier.de/"
+        llm_slug=ENV["WEBAPI_MODEL"], api=ENV["WEBAPI_ENDPOINT"]
     )
