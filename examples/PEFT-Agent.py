@@ -5,11 +5,11 @@ import llm_mastodon_agent as src
 
 ENV = dotenv.dotenv_values(".env")
 TOPICS = [
-    "Position on Trump",
-    "Position on Biden",
-    "Position on healthcare",
-    "Position on rifles",
-    "Position on voting age",
+    "Trump",
+    "Biden",
+    "healthcare",
+    "rifles",
+    "voting age",
 ]
 
 
@@ -47,4 +47,4 @@ agents = {
 
 for topic in TOPICS:
     for ideology, agent in agents.items():
-        agent.post(topic=topic, ideology=ideology, retrieve_news=False)
+        agent.post(topic=topic, ideology=ideology, retrieve_news=True)
