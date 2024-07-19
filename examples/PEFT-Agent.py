@@ -12,11 +12,18 @@ agent = src.Agent(
         llm_slug=ENV["HUGGINGFACE_PEFT_PATH"],
         auth_token=ENV["HUGGINGFACE_AUTH"],
     ),
+    prompting=src.Prompting(
+        persona_description="You are a social media user.",
+        ideologies={
+            "right-leaning": "Your are politically right leaning. Reflect conservative values and opinions in your responses."
+        },
+        post_task="Write a tweet on the following topic: {topic}"
+    )
 )
 
 topics = ["Trump", "Biden", "healthcare", "rifles", "voting age"]
 
 for topic in topics:
-    agent.post(topic=topics, ideology="alt-right", retrieve_news=False)
+    agent.post(topic=topics, ideology="right-leaning", retrieve_news=False)
 
     time.sleep(10)
