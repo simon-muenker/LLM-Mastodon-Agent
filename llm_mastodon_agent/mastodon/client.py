@@ -11,8 +11,7 @@ from .thread import Thread
 class Client(pydantic.BaseModel):
     name: str
     bearer: str
-
-    API: str = "https://twon.uni-trier.de/api/v1"
+    api: str
 
     @pydantic.computed_field  # type: ignore
     @property
@@ -21,12 +20,12 @@ class Client(pydantic.BaseModel):
 
     def __post(self, endpoint: str, data: typing.Dict = {}) -> typing.Dict:
         return requests.post(
-            f"{self.API}/{endpoint}", headers=self.request_header, data=data
+            f"{self.api}/{endpoint}", headers=self.request_header, data=data
         ).json()
 
     def __get(self, endpoint) -> typing.List[typing.Dict]:
         response: typing.List | typing.Dict = requests.get(
-            f"{self.API}/{endpoint}", headers=self.request_header
+            f"{self.api}/{endpoint}", headers=self.request_header
         ).json()
 
         if isinstance(response, typing.Dict):

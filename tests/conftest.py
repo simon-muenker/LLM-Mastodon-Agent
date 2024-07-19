@@ -9,7 +9,9 @@ ENV = dotenv.dotenv_values(".env")
 
 @pytest.fixture(scope="session", autouse=True)
 def client() -> src.mastodon.Client:
-    return src.mastodon.Client(name=ENV["MASTODON_USERNAME"], bearer=ENV["MASTODON_BEARER"])
+    return src.mastodon.Client(
+        name=ENV["MASTODON_USERNAME"], bearer=ENV["MASTODON_BEARER"], api=ENV["MASTODON_API"]
+    )
 
 
 @pytest.fixture(scope="session", autouse=True)
