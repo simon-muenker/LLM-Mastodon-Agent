@@ -46,13 +46,8 @@ class NewsArticle(pydantic.BaseModel):
     summary: str = ""
 
     def model_post_init(self, _):
-        news_page = self.retrieve_news_page()
-        news = random.choice(news_page)
-
-        self.url = decode_google_news_url(requests.get(news["url"]).url)
-
-        article = self.retrieve_article()
-
+        news_page = gnews.GNews(max_results=self.n).get_news(self.topic)
+        article = self.retrieve_n_retry(news_page)
         self.title = article.title
         self.summary = article.summary.replace("\n", " ")
 
@@ -64,13 +59,23 @@ class NewsArticle(pydantic.BaseModel):
         }
 
     def __str__(self) -> str:
-        return f"Title:{self.title}\nSummary:{self.summary}"
+        return f"Title: {self.title}\nSummary: {self.summary}"
 
-    def retrieve_news_page(self):
-        return gnews.GNews(max_results=self.n).get_news(self.topic)
+    def retrieve_n_retry(self, news_page):
+        try:
+            news = random.choice(news_page)
+            self.url = decode_google_news_url(requests.get(news["url"]).url)
+            return self.retrieve_article()
+
+        except Exception as _:
+            return self.retrieve_n_retry(news_page)
 
     def retrieve_article(self):
-        article = newspaper.Article(self.url)
+        config = newspaper.Config()
+        config.browser_user_agent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.102 Safari/537.36"
+
+        article = newspaper.Article(self.url, config=config)
+
         article.download()
         article.parse()
         article.nlp()
