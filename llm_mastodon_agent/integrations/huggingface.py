@@ -42,14 +42,16 @@ class Huggingface(Interface):
         self._tokenizer.pad_token = self._tokenizer.eos_token
 
     def inference(self, system: str, prompt: str, **_) -> str:
-        tokenized: typing.Mapping = self._tokenize(system, prompt)
+        encodings: transformers.BatchEncoding = self._tokenize(system, prompt)
 
         return self._tokenizer.batch_decode(
-            self._generate(tokenized)[:, tokenized.input_ids.shape[1] :],
+            self._generate(encodings)[:, encodings.input_ids.shape[1] :],
             skip_special_tokens=True,
         )[0]
 
-    def _tokenize(self, system: str, prompt: str, max_length: int = 200) -> typing.Mapping:
+    def _tokenize(
+        self, system: str, prompt: str, max_length: int = 200
+    ) -> transformers.BatchEncoding:
         return self._tokenizer(
             [
                 self._tokenizer.apply_chat_template(
@@ -66,10 +68,10 @@ class Huggingface(Interface):
             max_length=max_length,
         ).to("cuda")
 
-    @torch.no_grad
+    @torch.no_grad()
     def _generate(
         self,
-        batch: typing.List[typing.Mapping],
+        batch: transformers.BatchEncoding,
         temp: float = 0.7,
         max_length: int = 64,
         penalty: float = 1.2,
