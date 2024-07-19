@@ -8,7 +8,7 @@ from .prompting import Prompting
 
 
 class Agent(pydantic.BaseModel):
-    prompts: Prompting = Prompting()
+    prompting: Prompting = Prompting()
 
     client: mastodon.Client
     integration: integrations.Interface
