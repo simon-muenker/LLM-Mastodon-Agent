@@ -8,10 +8,10 @@ This package uses Poetry for dependency management and packaging. Ensure you hav
 
 ```bash
 # clone the repository
-git clone https://github.com/XXXX-XXXXX/LLM-Mastodon-Agent.git
+git clone https://github.com/simon-muenker/LLM-Mastodon-Agent.git
 
 # install the package and its dependencies using Poetry
-poetry install 
+poetry install
 
 # (optional) to activate the virtual environment created by Poetry
 poetry shell
