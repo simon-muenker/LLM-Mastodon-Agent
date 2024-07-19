@@ -19,8 +19,8 @@ class Agent(pydantic.BaseModel):
         return self.client.get_history()
 
     def get_persona(self, ideology: str, with_history: bool = True) -> str:
-        return self.prompts.get_persona_description(self.client.name, ideology) + (
-            "\n" + self.prompts.get_persona_history(self.history.to_prompt_segment())
+        return self.prompting.get_persona_description(self.client.name, ideology) + (
+            "\n" + self.prompting.get_persona_history(self.history.to_prompt_segment())
             if with_history
             else ""
         )
@@ -36,13 +36,13 @@ class Agent(pydantic.BaseModel):
             article = tools.NewsArticle(topic=topic)
             topic = article.summary
 
-        response: str = self.do_inference(ideology, self.prompts.get_post_task(topic))
+        response: str = self.do_inference(ideology, self.prompting.get_post_task(topic))
 
         self.client.post(f"{response}{" " + article.url if retrieve_news else ""}")
 
     def reply(self, ideology: str, thread: mastodon.Thread, context_length: int = 2) -> None:
         response: str = self.do_inference(
-            ideology, self.prompts.get_reply_task(thread.to_prompt_segment(n=context_length))
+            ideology, self.prompting.get_reply_task(thread.to_prompt_segment(n=context_length))
         )
 
         self.client.reply(thread[-1].idx, response)
