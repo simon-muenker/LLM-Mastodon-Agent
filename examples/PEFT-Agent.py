@@ -1,6 +1,6 @@
 import dotenv
 
-import llm_mastodon_agent as src
+import llm_mastodon_agent as llmma
 
 
 ENV = dotenv.dotenv_values(".env")
@@ -13,7 +13,7 @@ TOPICS = [
 ]
 
 
-prompting = src.Prompting(
+prompting = llmma.Prompting(
     persona_description="You are a social media user.",
     ideologies={
         "left-leaning": "You have politically left-leaning views. Reflect progressive values and opinions in your responses.",
@@ -23,25 +23,25 @@ prompting = src.Prompting(
 )
 
 agents = {
-    "left-leaning": src.Agent(
-        client=src.mastodon.Client(
+    "left-leaning": llmma.Agent(
+        client=llmma.mastodon.Client(
             name=ENV["MASTODON_LEFT_USERNAME"],
             bearer=ENV["MASTODON_LEFT_BEARER"],
             api=ENV["MASTODON_API"],
         ),
-        integration=src.integrations.Huggingface(
+        integration=llmma.integrations.Huggingface(
             llm_slug=ENV["HUGGINGFACE_AGENT_LEFT_PATH"],
             auth_token=ENV["HUGGINGFACE_AUTH"],
         ),
         prompting=prompting,
     ),
-    "right-leaning": src.Agent(
-        client=src.mastodon.Client(
+    "right-leaning": llmma.Agent(
+        client=llmma.mastodon.Client(
             name=ENV["MASTODON_RIGHT_USERNAME"],
             bearer=ENV["MASTODON_RIGHT_BEARER"],
             api=ENV["MASTODON_API"],
         ),
-        integration=src.integrations.Huggingface(
+        integration=llmma.integrations.Huggingface(
             llm_slug=ENV["HUGGINGFACE_AGENT_RIGHT_PATH"],
             auth_token=ENV["HUGGINGFACE_AUTH"],
         ),

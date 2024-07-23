@@ -1,7 +1,7 @@
-import llm_mastodon_agent as src
+import llm_mastodon_agent as llmma
 
 # TODO
-article = src.tools.NewsArticle(topic="Baseball")
+article = llmma.tools.NewsArticle(topic="Baseball")
 
 print(article.url)
 print(article)
