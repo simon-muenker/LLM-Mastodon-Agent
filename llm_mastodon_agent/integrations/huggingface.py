@@ -1,5 +1,6 @@
 import typing
 
+import pydantic
 import torch
 import transformers
 import peft
@@ -9,8 +10,18 @@ import huggingface_hub
 from ._interface import Interface
 
 
+class HuggingfaceInferenceConfig(pydantic.BaseModel):
+    input_max_length: int = 200
+
+    temperature: float = 0.7
+    output_max_length: int = 64
+    repetition_penalty: float = 1.2
+
+
 class Huggingface(Interface):
     auth_token: str
+
+    inference_config: HuggingfaceInferenceConfig = HuggingfaceInferenceConfig()
 
     _tokenizer: transformers.AutoTokenizer
     _model: peft.PeftModel
@@ -49,9 +60,7 @@ class Huggingface(Interface):
             skip_special_tokens=True,
         )[0]
 
-    def _tokenize(
-        self, system: str, prompt: str, max_length: int = 200
-    ) -> transformers.BatchEncoding:
+    def _tokenize(self, system: str, prompt: str) -> transformers.BatchEncoding:
         return self._tokenizer(
             [
                 self._tokenizer.apply_chat_template(
@@ -65,21 +74,18 @@ class Huggingface(Interface):
             return_tensors="pt",
             padding=True,
             truncation=True,
-            max_length=max_length,
+            max_length=self.inference_config.input_max_length,
         ).to("cuda")
 
     @torch.no_grad()
     def _generate(
         self,
         batch: transformers.BatchEncoding,
-        temp: float = 0.7,
-        max_length: int = 64,
-        penalty: float = 1.2,
     ) -> typing.Any:
         return self._model.generate(
             **batch,
-            temperature=temp,
-            max_new_tokens=max_length,
+            temperature=self.inference_config.temperature,
+            max_new_tokens=self.inference_config.output_max_length,
             do_sample=True,
-            repetition_penalty=penalty,
+            repetition_penalty=self.inference_config.repetition_penalty,
         )
