@@ -12,9 +12,13 @@ import requests
 
 # source: https://stackoverflow.com/a/59023463/
 _ENCODED_URL_PREFIX = "https://news.google.com/rss/articles/"
-_ENCODED_URL_PREFIX_WITH_CONSENT = "https://consent.google.com/m?continue=https://news.google.com/rss/articles/"
-_ENCODED_URL_RE = re.compile(fr"^{re.escape(_ENCODED_URL_PREFIX_WITH_CONSENT)}(?P<encoded_url>[^?]+)")
-_ENCODED_URL_RE = re.compile(fr"^{re.escape(_ENCODED_URL_PREFIX)}(?P<encoded_url>[^?]+)")
+_ENCODED_URL_PREFIX_WITH_CONSENT = (
+    "https://consent.google.com/m?continue=https://news.google.com/rss/articles/"
+)
+_ENCODED_URL_RE = re.compile(
+    rf"^{re.escape(_ENCODED_URL_PREFIX_WITH_CONSENT)}(?P<encoded_url>[^?]+)"
+)
+_ENCODED_URL_RE = re.compile(rf"^{re.escape(_ENCODED_URL_PREFIX)}(?P<encoded_url>[^?]+)")
 _DECODED_URL_RE = re.compile(rb'^\x08\x13".+?(?P<primary_url>http[^\xd2]+)\xd2\x01')
 
 
@@ -25,10 +29,10 @@ def _decode_google_news_url(url: str) -> str:
     encoded_text += "==="  # Fix incorrect padding. Ref: https://stackoverflow.com/a/49459036/
     decoded_text = base64.urlsafe_b64decode(encoded_text)
 
-    match = _DECODED_URL_RE.match(decoded_text)
+    match = _DECODED_URL_RE.match(decoded_text)  # type: ignore
 
     primary_url = match.groupdict()["primary_url"]  # type: ignore
-    primary_url = primary_url.decode()
+    primary_url = primary_url.decode()  # type: ignore
     return primary_url.strip()
 
 
@@ -81,6 +85,3 @@ class NewsArticle(pydantic.BaseModel):
         article.nlp()
 
         return article
-
-
-
