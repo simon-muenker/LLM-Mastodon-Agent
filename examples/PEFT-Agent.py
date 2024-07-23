@@ -25,7 +25,9 @@ prompting = src.Prompting(
 agents = {
     "left-leaning": src.Agent(
         client=src.mastodon.Client(
-            name=ENV["MASTODON_LEFT_USERNAME"], bearer=ENV["MASTODON_LEFT_BEARER"], api=ENV["MASTODON_API"]
+            name=ENV["MASTODON_LEFT_USERNAME"],
+            bearer=ENV["MASTODON_LEFT_BEARER"],
+            api=ENV["MASTODON_API"],
         ),
         integration=src.integrations.Huggingface(
             llm_slug=ENV["HUGGINGFACE_AGENT_LEFT_PATH"],
@@ -35,7 +37,9 @@ agents = {
     ),
     "right-leaning": src.Agent(
         client=src.mastodon.Client(
-            name=ENV["MASTODON_RIGHT_USERNAME"], bearer=ENV["MASTODON_RIGHT_BEARER"], api=ENV["MASTODON_API"]
+            name=ENV["MASTODON_RIGHT_USERNAME"],
+            bearer=ENV["MASTODON_RIGHT_BEARER"],
+            api=ENV["MASTODON_API"],
         ),
         integration=src.integrations.Huggingface(
             llm_slug=ENV["HUGGINGFACE_AGENT_RIGHT_PATH"],
