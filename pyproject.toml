@@ -50,6 +50,9 @@ build-backend = "poetry.core.masonry.api"
 [tool.ruff]
 line-length = 96
 
+[tool.ruff.lint]
+select = ["I", "N", "UP", "A", "PL"]
+
 
 [tool.mypy]
 files = "llm_mastodon_agent"

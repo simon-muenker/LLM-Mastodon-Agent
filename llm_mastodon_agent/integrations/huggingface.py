@@ -1,11 +1,10 @@
 import typing
 
+import huggingface_hub
+import peft
 import pydantic
 import torch
 import transformers
-import peft
-
-import huggingface_hub
 
 from ._interface import Interface
 

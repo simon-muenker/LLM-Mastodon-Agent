@@ -1,6 +1,5 @@
-import pytest
-
 import dotenv
+import pytest
 
 import llm_mastodon_agent as llmma
 

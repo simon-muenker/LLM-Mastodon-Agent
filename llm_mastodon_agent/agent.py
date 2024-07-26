@@ -1,9 +1,6 @@
 import pydantic
 
-from . import integrations
-from . import tools
-from . import mastodon
-
+from . import integrations, mastodon, tools
 from .prompting import Prompting
 
 

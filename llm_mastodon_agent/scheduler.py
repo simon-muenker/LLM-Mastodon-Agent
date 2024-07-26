@@ -1,50 +1,72 @@
-import typing
 import logging
-import time
 import random
+import time
+import typing
 
+import numpy as np
 import pydantic
 
 from .agent import Agent
 
 
 class Action(pydantic.BaseModel):
-    name: str
-    frequency: int
     probability: float
-    callback: typing.Callable
+
+    label: str | None = None
+    callback: typing.Callable | None = None
 
 
 class Scheduler(pydantic.BaseModel):
     agent: Agent | None = None
 
-    planck_time: int = 60  # smallest time step (60 seconds)
-    cycle_duration: int = 60 * 60  # 1 hour
+    sleep_time: int = 1  # smallest time step (60 seconds)
 
-    actions: typing.List[Action] = [
+    act: Action = Action(probability=0.2)
+    chicken: Action = Action(probability=0.4)
+
+    retrievals: typing.List[Action] = [
+        Action(probability=0.4, label="read_home", callback=lambda: logging.debug("read home")),
         Action(
-            name="like", frequency=16, probability=0.4, callback=lambda: logging.debug("liked")
-        ),
-        Action(
-            name="post", frequency=2, probability=0.8, callback=lambda: logging.debug("posted")
-        ),
-        Action(
-            name="reply",
-            frequency=4,
             probability=0.4,
-            callback=lambda: logging.debug("replied"),
+            label="read_notifications",
+            callback=lambda: logging.debug("read notifications"),
+        ),
+        Action(
+            probability=0.2,
+            label="read_news",
+            callback=lambda: logging.debug("read external news"),
         ),
     ]
 
-    _current_time: int = 0
+    actions: typing.List[Action] = [
+        Action(
+            probability=0.2,
+            label="posted",
+            callback=lambda x: logging.debug(f"post to context {x}"),
+        ),
+        Action(
+            probability=0.8,
+            label="replied",
+            callback=lambda x: logging.debug(f"reply to context {x}"),
+        ),
+    ]
 
     def __call__(self) -> None:
         while True:
-            for action in self.actions:
-                if self._current_time % (self.cycle_duration / action.frequency) < 0.1:
-                    if random.uniform(0.0, 1.0) < action.probability:
-                        action.callback()
+            if random.uniform(0.0, 1.0) > self.act.probability:
+                continue
 
-            self._current_time += self.planck_time
-            self._current_time %= self.cycle_duration
-            time.sleep(self.planck_time)
+            retrieval: Action = np.random.default_rng().choice(
+                self.retrievals, p=[action.probability for action in self.retrievals]
+            )
+            retrieval.callback()
+
+            if random.uniform(0.0, 1.0) > self.chicken.probability:
+                continue
+
+            action: Action = np.random.default_rng().choice(
+                self.actions, p=[action.probability for action in self.actions]
+            )
+            action.callback(retrieval.label)
+
+            time.sleep(self.sleep_time)

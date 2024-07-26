@@ -1,11 +1,10 @@
 import typing
 
 import pydantic
-
 import requests
 
-from .timeline import Timeline
 from .thread import Thread
+from .timeline import Timeline
 
 
 class Client(pydantic.BaseModel):

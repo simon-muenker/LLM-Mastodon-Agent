@@ -1,8 +1,8 @@
-import typing
 import datetime
+import typing
 
-import pydantic
 import bs4
+import pydantic
 
 
 class Post(pydantic.BaseModel):

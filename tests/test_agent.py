@@ -2,7 +2,6 @@ import logging
 
 import pytest
 
-
 import llm_mastodon_agent as llmma
 
 

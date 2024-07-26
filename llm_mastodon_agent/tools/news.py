@@ -1,14 +1,12 @@
-import random
-import functools
-import re
 import base64
-
-import pydantic
+import functools
+import random
+import re
 
 import gnews
 import newspaper
+import pydantic
 import requests
-
 
 # source: https://stackoverflow.com/a/59023463/
 _ENCODED_URL_PREFIX = "https://news.google.com/rss/articles/"
