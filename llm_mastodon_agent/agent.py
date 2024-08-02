@@ -24,8 +24,7 @@ class Agent(pydantic.BaseModel):
 
     def do_inference(self, ideology: str, prompt: str) -> str:
         return self.integration.inference(
-            system=self.get_persona(ideology),
-            prompt=prompt,
+            integrations.Prompt(system=self.get_persona(ideology), user=prompt)
         )
 
     def post(self, ideology: str, topic: str, retrieve_news: bool = True) -> None:

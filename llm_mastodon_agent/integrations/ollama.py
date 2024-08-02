@@ -1,8 +1,10 @@
 import ollama
 
-from ._interface import Interface
+from ._interface import Interface, Prompt
 
 
 class Ollama(Interface):
-    def inference(self, system: str, prompt: str, **_) -> str:
-        return ollama.generate(model=self.llm_slug, system=system, prompt=prompt)["response"]  # type: ignore
+    def inference(self, prompt: Prompt, **_) -> str:
+        return ollama.generate(model=self.llm_slug, system=prompt.system, prompt=prompt.user)[
+            "response"
+        ]  # type: ignore
